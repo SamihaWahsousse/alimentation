@@ -1,0 +1,12 @@
+{
+  "name": "alimentation",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "buildSass":"sass assets/scss/app.scss assets/css/app.min.css --watch --style=compressed"
+
+  },
+  "author": "",
+  "license": "ISC"
+}
