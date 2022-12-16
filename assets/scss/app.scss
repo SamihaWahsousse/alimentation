@@ -1,4 +1,55 @@
-body{
+@import 'variables.scss';
+@import 'components/header.scss';
+@import 'components/datauser.scss';
 
-    background-color:pink;
+
+
+//body{
+//background-color:pink;
+//}
+
+.containerApp{
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+
+}
+
+main{
+    flex: 1;
+    overflow-y: scroll;
+}
+
+
+.doughnut{
+    width: 400px;
+    margin: auto;
+    position:relative;
+    .kcal{
+        position: absolute;
+        top:50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        color: white;
+        font-size: 1.4rem;
+    }
+}
+.custom-shape-divider-bottom-1671192619 {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+}
+
+.custom-shape-divider-bottom-1671192619 svg {
+    position: relative;
+    display: block;
+    width: calc(100% + 1.3px);
+    height: 94px;
+}
+
+.custom-shape-divider-bottom-1671192619 .shape-fill {
+    fill: #FFFFFF;
 }
