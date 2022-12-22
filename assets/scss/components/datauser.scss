@@ -1,8 +1,49 @@
-
-
-
 .dataUser{
     position: relative;
     background: linear-gradient(to bottom,$primary,$secondary);
+    display: flex;
+    flex-direction: row;
+    
+ 
+
+    .doughnut{
+        width: 300px;
+        margin: auto;
+        //position:relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: auto;
+        .kcal{
+            position: absolute;
+            top:50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            color: white;
+            font-size: 1.4rem;
+        }
+    }
+    .custom-shape-divider-bottom-1671192619 {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        overflow: hidden;
+        line-height: 0;
+    }
+    
+    .custom-shape-divider-bottom-1671192619 svg {
+        position: relative;
+        display: block;
+        width: calc(100% + 1.3px);
+        height: 94px;
+    }
+    
+    .custom-shape-divider-bottom-1671192619 .shape-fill {
+        fill:rgb(252, 252, 252);
+    }
 
 }
+
+
+
