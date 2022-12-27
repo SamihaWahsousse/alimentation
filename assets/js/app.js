@@ -51,13 +51,43 @@ function sliderChange3(val){
 
 
 document.getElementById("btnAddFood").addEventListener("click",function(){
-  const foodName=document.querySelector("#inputRepas").value;
-  const foodCalorie=document.querySelector("#inputCalories").value;
+ // const foodName=document.querySelector("#inputRepas").value;
+ // const foodCalorie=document.querySelector("#inputCalories").value;
   console.log(foodName,foodCalorie);
 
 
 });
 
+function editLink(foodName,calories,idFood) {
+  console.log('samiha bb ' + foodName +calories);
 
+const foodInput =document.getElementById("inputRepasEdit");
+foodInput.value = foodName;
+const calorieInput= document.getElementById("inputCaloriesEdit");
+calorieInput.value=calories;
+
+const idInput =document.getElementById("inputIdFood");
+idInput.value=idFood;
+
+
+
+
+
+}
+
+
+
+/*
+$(".editLink").click(function () {
+    
+  // alert('test');
+  console.log('samiha bb');
+  /* var food = $("#name").val();
+    var marks = $("#marks").val();
+    var str = "You Have Entered " 
+        + "Name: " + name 
+        + " and Marks: " + marks;
+    $("#modal_body").html(str); 
+});*/
 
 //document.querySelector("#inputRepas").value;

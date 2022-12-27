@@ -88,7 +88,7 @@ $_['mail']) && isset($_POST['password']) ){
 
 */
 
-if(isset($POST['ok'])){
+if(isset($POST['edit'])){
 
 $mail = $_POST['mail'];
 $pwd = $_POST['password'];

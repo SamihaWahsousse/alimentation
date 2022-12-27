@@ -19,7 +19,7 @@ body{
 
 main{
     flex: 1;
-  // overflow-y: scroll;
+   overflow-y: scroll;
 }
 
 .list{
@@ -37,7 +37,7 @@ main{
    margin: 0 auto 1rem auto;
    padding-left: 1rem;
     .calorieFood{
-        color: grey;
+        color: gray;
     }
 }
 
