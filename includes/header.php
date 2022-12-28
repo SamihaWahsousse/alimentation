@@ -13,9 +13,9 @@
     <link rel="stylesheet" href="assets/css/app.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="assets/js/app.js" defer></script>
+    <!--Ajout du cdn jquery-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 
 
 
 </head>
-
-<body>

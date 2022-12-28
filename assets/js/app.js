@@ -1,7 +1,9 @@
-console.log("coucou from app.js");
+//s'assurer que le document est bien chargé avant d'effectuer des appels JQUERY
 
 
 
+
+//chart des foods et ses calories 
 const ctx = document.getElementById('myChart');
 
 new Chart(ctx, {
