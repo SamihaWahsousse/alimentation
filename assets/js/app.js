@@ -1,9 +1,43 @@
-//s'assurer que le document est bien chargé avant d'effectuer des appels JQUERY
 
+/*Fonction setChart qui prend comme param 2 array labels->tableau de name_food et calorie_food depuis la BDD(php fetch all et array-column)
+ces 2 tableaux en php converti en JAVASCRIPT avec json_encode */
 
-
-
-//chart des foods et ses calories 
+function setChart(labels,datas) {
+  //chart des foods et ses calories 
+const ctx = document.getElementById('myChart');
+new Chart(ctx, {
+  type: 'doughnut',
+  data: {
+      labels: labels,
+      datasets: [{
+      label: '',
+      data: datas,
+      borderWidth: false,
+      hoverOffset:20,
+      backgroundColor: [
+        "#FF5E5B",
+        "#D8D8D8",
+        "#FFED66",
+        "#00CECB",
+        "#FFED66",
+      ],
+    }]
+  },
+  options: {
+    responsive:true,
+    cutout:"90%",
+    plugins:{
+        legend:false,
+    },
+    layout:{
+        padding:20
+    }
+  }
+});
+}
+ 
+//chart des foods et ses calories
+/* 
 const ctx = document.getElementById('myChart');
 
 new Chart(ctx, {
@@ -36,7 +70,7 @@ new Chart(ctx, {
   }
 });
 
-
+*/
 
 
 function sliderChange1(val){

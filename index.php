@@ -37,19 +37,33 @@ lIMIT 10";
 $stmt = $conn->prepare($sql);
 $stmt->execute();
 
-//function de calcule des calories à ne pas dépasser par jour en fonction de taille/poids/age
+//convertir les données retournées depuis la BDD(object en array) en tableau
+$stmt=$stmt->fetchAll(PDO::FETCH_ASSOC);
 
+ //extraire la colonne name_food du tableau stmt et les ajouter dans un nouveau tableau
+ $arrayNameFood=array_column($stmt,'name_food');
+ $arrayCalorieFood=array_column($stmt,'calorie_food');
+
+ //appel de la fonction setChart pour afficher notre doughnut chart avec les data+labels du tableau $stmt (résultat de la requete BDD) 
+ // utiliser la fonction json_encode pour passeer un tableau en php à une fonction javascript
+ echo   '<script type="text/javascript">' 
+        .'$(document).ready(function(){'
+        .'setChart('.json_encode($arrayNameFood) .','.json_encode($arrayCalorieFood).'); });'
+        .'</script>';
+ 
+
+    //function de calcule des calories à ne pas dépasser par jour en fonction de taille/poids/age
 function calorieCalculator($weight,$size,$age){
     $weightCal=$weight*13.7516;
     $sizeCal=($size/100)*500.33;
     $weightSize= $weightCal+ $sizeCal;
     $ageCal=$age*6.7550;
     $resultCal=($weightSize-$ageCal)+66.473;
-    //1.56 l'indice de l'activité physique moins de 3fois/semaine 
+    //1.56 l'indice de l'activité physique moins de 3 fois/semaine 
     $totalLimitCalorie= $resultCal*1.56;
-   
-    return round($totalLimitCalorie);
-   }
+ return round($totalLimitCalorie);
+                                             }
+//test de la fonction par des valeurs de USER
     $limitCaloriePerDay=calorieCalculator(65,160,30);
     echo $limitCaloriePerDay;
 
@@ -67,25 +81,17 @@ foreach ($stmt as $food) {
         ];
         array_push($tabFood,$data);
 
-      $sumCalories=$sumCalories+$data['calorie'];
+      $sumCalories=$sumCalories + $data['calorie'];
 
       //vérifier si la somme des calories de l'utilisateur sont supérieur au seuil calculé par la function calorieCalculator
       if($sumCalories>$limitCaloriePerDay){
-      // echo 'mehdi'; 
-       echo '<script type="text/javascript"> $( document ).ready(function(){$("#modalAlertCalorie").modal("show");}); </script>';
-      // echo '<script type="text/javascript"> $("#modalAlertCalorie").modal("show"); </script>';
-
-      // echo '<script>$("#modalAlertCalorie").modal()</script>';
-
-
-    /*    echo '<script type ="text/JavaScript">';  
-        echo 'alert("vous avez dépassé la limite des calories autorisé par jour!")';  
-        echo '</script>'; */
-        }
-        
+          echo '<script type="text/javascript"> $( document ).ready(function(){$("#modalAlertCalorie").modal("show");}); </script>';
    
+        }
+          
   }
-  
+
+ 
 $page=[
     "title" => "Track Calorie - Accueil"
 ];
@@ -227,13 +233,6 @@ foreach ($tabFood as $food){?>
 
             </section>
 
-            <!--mon ancien bouton
-        <div class="text-center">
-            <button class="d-block mt-5 btn btn-primary mx-auto" data-bs-toggle="modal"
-                data-bs-target="#modalAddFood">Add food</button>
-        </div>
-
-         Button trigger modal -->
 
 
 

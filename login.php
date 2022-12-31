@@ -1,18 +1,70 @@
 <?php
+session_start();
 
     $page=[
         "title" => "Track Calorie - Login"
     ];
     include_once('includes/header.php');
-    //include "Connexion.php";
+    //on vérifie si le formulaire a été envoyé
+    if(!empty($_POST)){
+        //on vérifie que tous les champs raquis sont remplis
+        if((isset($_POST["mail"],$_POST["password"]) && !empty($_POST["mail"]) && !empty($_POST["password"]))
+            ){
+        //vérification si $_post ['email'] respecte le format d'un email
+            if (!filter_var($_POST["mail"], FILTER_VALIDATE_EMAIL)){
+                die("Ce n'est pas un email!");
+                                                                     }
+    //on se connecte à la bdd
+    include "./bdd/connexion.php";
+
+    $sql = "SELECT * FROM `users`  WHERE `Email`= :mail";
+
+    $stmt = $conn->prepare($sql);
+
+    $stmt->bindValue(":mail",$_POST["mail"]);
+    
+    $stmt->execute();
+    $user= $stmt->fetch();
+    
+    if(!$user){
+        die("l'utilisateur et/ou mot de passe est incorrect");
+    }
+
+    //l'utilisateur existe dans notre bdd,on peut vérifier le mot de passe 
+    if(!password_verify($_POST["password"], $user["password"])){
+
+        die("l'utilisateur et/ou mot de passe est incorrect");
+                                                             }
+
+
+     //l'utilisateur et mot de passe sont corrects,on ouvre une session PHP pour stocker les informations de connexion
+     //de notre utilisateur connecté
+     $_SESSION["user"]=[
+            "id"=>$user["id"],
+            "name"=>$user["name"],
+            "email"=>$user["Email"],
+            "Age"=>$user["age"],
+            "Size"=>$user["size"],
+            "Weight"=>$user["weight"],
+            "Sexe"=>$user["sexe"]
+     ];     
+     
+//on redirige l'utilisateur vers la page index.php
+
+header("location:index.php");
+
+
+             }
+
+    
+                    }
+
 ?>
-
-
 <div class="containerApp">
     <header>
         <div class="row text-center"></div>
         <div class="col-auto">
-            <h1>Login Page</h1>
+            <h1 class="text-center">Login Page</h1>
         </div>
     </header>
 
@@ -31,7 +83,7 @@
                             <input type="password" name="password" class="form-control" id="inputPassword"
                                 placeholder="Saisissez votre mot de passe">
                             <label for="inputPassword" class="form-label">Password</label>
-                            <p style="display:none" id="error">Nom d'utilisateur ou mot de passe incoorect!
+                            <p style="display:none" id="error">Nom d'utilisateur ou mot de passe incorecct!
                             </p>
                         </div>
                     </div>
@@ -55,73 +107,32 @@
 
 <?php
 
-include "connexion.php";
 
-/*if(isset($_POST['ok']))
-$_['mail']) && isset($_POST['password']) ){
+
+/*if(isset($POST['ok'])){
 
     
-    // création de connexion
-    $conn = new mysqli($servername, $username, $password, $dbname);
 
-    // vérifier connexion 
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
+    if ($result->rowCount() == 1) {
+  
+            header("Location: ./index.php");
+        } else {
+            header("Location: .");
+            echo"utilisateur inexistant dans la bdd";
+            exit;
+        }
+        
     }
-
-    $mail = $_POST['mail'];
-    $pwd = $_POST['password'];
-    $sql = "SELECT * FROM `utilisateur` WHERE `email` = '$mail' AND `password` = '$pwd' ";
-
-    $result = $conn->query($sql);
-
-    if ($result->num_rows == 1) {
-        header("Location: ./AjouterCarnetRappel.php");
-    } else {
-        header("Location: .");
-        exit;
-    }
-    $conn->close();
-}
-
-?>
-
-*/
-
-if(isset($POST['edit'])){
-
-$mail = $_POST['mail'];
-$pwd = $_POST['password'];
-$sql = "SELECT * FROM users WHERE Email = '$mail' AND `password`='$pwd'";
-$result = $conn->query($sql);
-
-if ($result->rowCount() == 1) {
-
-
-
 if($donnees=$result->fetch()){
 header("Location: index.php");
 } else {
 header("Location: .");
-echo"
-
-else{
-
-echo"
+echo'
 <script>
-document.getElementById(`error`).style.display = 'block';
-document.getElementById(`error`).style.color = 'red';
-</script> ";
+document.getElementById(`error`).style.display = "block";
+document.getElementById(`error`).style.color = "red";
+</script> ;'
 
-}
-
-
-
-
-
-exit;
-
-?
->
-
-<?php include_once('includes/footer.php'); ?>
+}*/
+include_once('includes/footer.php');
+?>
