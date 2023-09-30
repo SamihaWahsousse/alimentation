@@ -1,7 +1,9 @@
 <?php
+        session_start();
+
 require_once "./bdd/connexion.php";
 
-var_dump($_POST);
+//var_dump($_POST);
 
 if(isset($_POST['inputRepasEdit']) && !empty($_POST['inputRepasEdit']) && isset($_POST['inputCaloriesEdit'])
  && !empty($_POST['inputCaloriesEdit']) && isset($_POST['inputIdFood']) && !empty ($_POST['inputIdFood'])){

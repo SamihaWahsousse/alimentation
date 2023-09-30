@@ -1,5 +1,9 @@
+
 .linkRegister a {
-    color: red;
+    color:blue;
     text-decoration: none;
-    
+}
+
+.errorMessage{
+    color: $errorColor;
 }

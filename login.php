@@ -1,63 +1,66 @@
 <?php
 session_start();
+include_once('includes/header.php');
+require_once  "./bdd/connexion.php";
 
-    $page=[
-        "title" => "Track Calorie - Login"
-    ];
-    include_once('includes/header.php');
-    //on vérifie si le formulaire a été envoyé
-    if(!empty($_POST)){
-        //on vérifie que tous les champs raquis sont remplis
-        if((isset($_POST["mail"],$_POST["password"]) && !empty($_POST["mail"]) && !empty($_POST["password"]))
-            ){
-        //vérification si $_post ['email'] respecte le format d'un email
-            if (!filter_var($_POST["mail"], FILTER_VALIDATE_EMAIL)){
-                die("Ce n'est pas un email!");
-                                                                     }
-    //on se connecte à la bdd
-    include "./bdd/connexion.php";
+$page = [
+    "title" => "Track Calorie - Login"
+];
 
-    $sql = "SELECT * FROM `users`  WHERE `Email`= :mail";
+// on vérifie si l'utilisateur est déjà connecté 
+if (isset($_SESSION["user"]) && !empty($_SESSION["user"]["id"])) {
+    header("Location:index.php");
+}
 
-    $stmt = $conn->prepare($sql);
+//on vérifie si le formulaire a été bien envoyé
+if (!empty($_POST)) {
 
-    $stmt->bindValue(":mail",$_POST["mail"]);
-    
-    $stmt->execute();
-    $user= $stmt->fetch();
-    
-    if(!$user){
-        die("l'utilisateur et/ou mot de passe est incorrect");
+    //on vérifie que tous les champs requis sont remplis
+    if ((isset($_POST["mail"], $_POST["password"]) && !empty($_POST["mail"]) && !empty($_POST["password"]))) {
+
+        //on vérifie si $_post ['mail'] respecte le format d'un email
+        if (!filter_var($_POST["mail"], FILTER_VALIDATE_EMAIL)) {
+            $_SESSION["errorMessage"] = "l'adresse mail est incorrect!.";
+        }
+
+        //on vérife si l'email existe dans la BDD
+        $sql = "SELECT * FROM `users`  WHERE `Email`= :mail";
+
+        $stmt = $conn->prepare($sql);
+
+        $stmt->bindValue(":mail", $_POST["mail"], PDO::PARAM_STR);
+
+        $stmt->execute();
+        $user = $stmt->fetch();
+
+
+        if (!$user) {
+            $_SESSION["errorMessage"] = "l'utilisateur et/ou mot de passe est incorrect.";
+        }
+
+
+        //l'utilisateur existe dans notre bdd,on vérifie le mot de passe 
+        if (!password_verify($_POST["password"], $user["password"])) {
+            $_SESSION["errorMessage"] = "l'utilisateur et/ou mot de passe est incorrect.";
+        } else {
+
+            //formule pour calculer l'IMC de l'utilisateur à partir de la variable de session
+            $calcImc = (round($user["weight"]) / pow((($user["size"]) / 100), 2));
+
+            //créer une session pour le calcul IMC qui ne fait pas partie des paramètres $_POST envoyées par l'utilisateur dans le formulaire register
+            $user["IMC"] = $calcImc;
+
+            //l'utilisateur et mot de passe sont corrects,on ouvre une session PHP pour stocker les informations de connexion de notre utilisateur connecté
+            $_SESSION["user"] = $user;
+
+            // supprimer les messages d'erreurs affichés
+            unset($_SESSION["errorMessage"]);
+
+            //on redirige l'utilisateur vers la page index.php
+            header("location:index.php");
+        }
     }
-
-    //l'utilisateur existe dans notre bdd,on peut vérifier le mot de passe 
-    if(!password_verify($_POST["password"], $user["password"])){
-
-        die("l'utilisateur et/ou mot de passe est incorrect");
-                                                             }
-
-
-     //l'utilisateur et mot de passe sont corrects,on ouvre une session PHP pour stocker les informations de connexion
-     //de notre utilisateur connecté
-     $_SESSION["user"]=[
-            "id"=>$user["id"],
-            "name"=>$user["name"],
-            "email"=>$user["Email"],
-            "Age"=>$user["age"],
-            "Size"=>$user["size"],
-            "Weight"=>$user["weight"],
-            "Sexe"=>$user["sexe"]
-     ];     
-     
-//on redirige l'utilisateur vers la page index.php
-
-header("location:index.php");
-
-
-             }
-
-    
-                    }
+}
 
 ?>
 <div class="containerApp">
@@ -71,17 +74,21 @@ header("location:index.php");
     <div class="container mt-5 w-50">
         <div class="row">
             <div class="col">
+                <div class="errorMessage">
+                    <?php
+                    if (isset($_SESSION["errorMessage"])) {
+                        echo ($_SESSION["errorMessage"]);
+                    } ?>
+                </div>
                 <form method="POST" class=" text-center ">
                     <div class="mb-2 form-floating">
-                        <input type="email" name="mail" class="form-control" id="inputEmail"
-                            placeholder="Saisissez votre email">
+                        <input type="email" name="mail" class="form-control" id="inputEmail" placeholder="Saisissez votre email" autocomplete="off">
                         <label for="inputEmail" class="form-label">Email</label>
 
                     </div>
                     <div class="row">
                         <div class="mb-2 form-floating">
-                            <input type="password" name="password" class="form-control" id="inputPassword"
-                                placeholder="Saisissez votre mot de passe">
+                            <input type="password" name="password" class="form-control" id="inputPassword" placeholder="Saisissez votre mot de passe" autocomplete="off">
                             <label for="inputPassword" class="form-label">Password</label>
                             <p style="display:none" id="error">Nom d'utilisateur ou mot de passe incorecct!
                             </p>
@@ -106,33 +113,5 @@ header("location:index.php");
 
 
 <?php
-
-
-
-/*if(isset($POST['ok'])){
-
-    
-
-    if ($result->rowCount() == 1) {
-  
-            header("Location: ./index.php");
-        } else {
-            header("Location: .");
-            echo"utilisateur inexistant dans la bdd";
-            exit;
-        }
-        
-    }
-if($donnees=$result->fetch()){
-header("Location: index.php");
-} else {
-header("Location: .");
-echo'
-<script>
-document.getElementById(`error`).style.display = "block";
-document.getElementById(`error`).style.color = "red";
-</script> ;'
-
-}*/
 include_once('includes/footer.php');
 ?>

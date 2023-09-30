@@ -4,12 +4,15 @@
     display: flex;
     flex-direction: row;
     
- 
+    #myChart{
+        width: 100px;
+        height: 100px;
+    }
 
     .doughnut{
-        width: 300px;
+        width: 20rem;
         margin: auto;
-        //position:relative;
+        position:relative;
         display: flex;
         align-items: center;
         justify-content: center;

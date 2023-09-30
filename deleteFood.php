@@ -1,4 +1,6 @@
 <?php
+ session_start();
+
 include "./bdd/connexion.php";
 //récuperer
 $id= $_GET['id_food'];
